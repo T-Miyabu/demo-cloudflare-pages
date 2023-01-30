@@ -1,4 +1,4 @@
-import type { GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from 'next';
+import type { GetServerSideProps, InferGetServerSidePropsType, NextPage } from 'next';
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -9,7 +9,7 @@ type Todo = {
   completed: boolean;
 };
 
-function Todos(props: Props) {
+const Todos: NextPage<Props> = (props) => {
   const todo: Todo[] = props.todo;
   return (
     <div>
@@ -21,23 +21,17 @@ function Todos(props: Props) {
       </ul>
     </div>
   );
-}
+};
 
 export default Todos;
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  try {
-    const response = await fetch('https://jsonplaceholder.typicode.com/todos');
-    const todo = await response.json();
+export const getServerSideProps: GetServerSideProps = async () => {
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+  const todo = await response.json();
 
-    return {
-      props: {
-        todo
-      }
-    };
-  } catch (err) {
-    if (err instanceof Error) {
-      console.error(err.message);
+  return {
+    props: {
+      todo
     }
-  }
-}
+  };
+};
