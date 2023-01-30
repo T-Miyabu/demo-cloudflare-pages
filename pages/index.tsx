@@ -26,11 +26,18 @@ function Todos(props: Props) {
 export default Todos;
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const response = await fetch('https://jsonplaceholder.typicode.com/todos');
-  const todo = await response.json();
-  return {
-    props: {
-      todo
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+    const todo = await response.json();
+
+    return {
+      props: {
+        todo
+      }
+    };
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error(err.message);
     }
-  };
+  }
 }
